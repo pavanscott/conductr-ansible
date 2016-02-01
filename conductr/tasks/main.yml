@@ -6,7 +6,7 @@
   apt: deb=/home/ubuntu/{{ CONDUCTR_PKG }}
 
 - name: Install Conductr-Haproxy
-  apt: deb=/usr/share/conductr/extra/{{ CONDCUTR_HAPROXY_PKG }}
+  apt: deb=/usr/share/conductr/extra/{{ CONDUCTR_HAPROXY_PKG }}
 
 - command: rm /home/ubuntu/{{ CONDUCTR_PKG }}
 
@@ -55,7 +55,7 @@
   become: yes
   become_method: sudo
 
-- shell: 'echo "conductr-haproxy ALL=(root) NOPASSWD: /etc/init.d/haproxy reload" | sudo tee -a /etc/sudoers'
+- shell: 'echo "conductr-haproxy ALL=(root) NOPASSWD: /usr/bin/reloadHAProxy.sh" | sudo tee -a /etc/sudoers'
   become: yes
   become_method: sudo
  
