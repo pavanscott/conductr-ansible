@@ -1,8 +1,8 @@
-# Ansible Plays for Typesafe ConductR
+# Ansible Plays for Lightbend ConductR
 
-These plays and playbooks provision [Typesafe ConductR](https://conductr.typesafe.com) cluster nodes in AWS EC2 using [Ansible](http://www.ansible.com).
+These plays and playbooks provision [Lightbend ConductR](https://conductr.lightbend.com) cluster nodes in AWS EC2 using [Ansible](http://www.ansible.com).
 
-**This version of ConductR Ansible is compatible with ConductR version 1.0.* and 1.1.***
+**This version of ConductR Ansible is compatible with ConductR version 1.1.x. ***
 
 Use create-network-ec2.yml to setup a new VPC and create your cluster in the new VPC. You only need to provide your access keys and what region to execute in.
 The playbook outputs a vars file for use with the build-cluster-ec.yml.
@@ -22,7 +22,7 @@ You'll need the following in order to use these playbooks.
 
 ## Setup
 
-ConductR is **not** provided by this repository. Visit the [Customer Portal](https://together.typesafe.com/) to download or [Typesafe.com](https://www.typesafe.com/products/conductr) to sign up to evaluate ConductR.
+ConductR is **not** provided by this repository. Visit the [Customer Portal](https://portal.lightbend.com/) to download or [Lightbend.com](https://www.typesafe.com/products/conductr) to sign up to evaluate Lightbend Production Suite.
 
 Copy the ConductR deb installation package into the `conductr/files` folder in your local copy of this repo. The installation package will be uploaded from this folder by the ConductR play to each of the EC2 instances for installation.
 
@@ -54,6 +54,8 @@ Optionally specify what [EC2 region](http://docs.aws.amazon.com/general/latest/g
 ```bash
 ansible-playbook create-network-ec2.yml -e "EC2_REGION=eu-west-1"
 ```
+
+The playbook defaults to availability zones `a`, `b`, and `c`. Change the create-network playbook to use other zones. Accordingly, the build-cluster playbook's `Launch nodes` task can be customize as desired, such as launching more nodes by repeating subnets in `with_items`.
 
 The create network playbook produces a vars file in the `vars` folder named `{{EC2_REGION}}_vars.yml` where {{EC2_REGION}} is the region used. You **must** add the name of your key pair to `{{EC2_REGION}}_vars.yml` in order to use it with the build cluster script. Change the "Key Pair Name" of `KEYPAIR: "Key Pair Name"` to that of the key pair name, which may be different than the file name and generally does not end in the .pem file extension.
 
@@ -106,8 +108,11 @@ Setup Ansible from source using git and pip.
 git clone https://github.com/ansible/ansible.git --recursive
 sudo apt-get install python-setuptools autoconf g++ python2.7-dev
 sudo easy_install pip
-sudo pip install paramiko PyYAML Jinja2 httplib2 boto3
+sudo pip install paramiko PyYAML Jinja2 httplib2 boto
 ```
+
+Should `pip` not satisfy requirements, `easy_install` is an alternative python installer. Example: `sudo python -m easy_install pyyaml`.
+
 Create a hosts file for Ansible.
 
 ```bash
