@@ -6,9 +6,8 @@
 
 - name: Add Docker Repo Key
   apt_key:
-    keyserver: keyserver.ubuntu.com
-    id: 36A1D7869245C8950F966E92D8576A8BA88D21E9
-    url: http://get.docker.io/gpg
+    id: 2C52609D
+    url: https://apt.dockerproject.org/gpg
     state: present
 
 - name: Add Docker repository and update apt cache
@@ -17,9 +16,9 @@
     update_cache: yes
     state: present
 
-- name: Install lxc-docker package
+- name: Install docker-engine package
   apt:
-    name: lxc-docker
+    name: docker-engine
     state: latest
     update_cache: yes
     cache_valid_time: 600

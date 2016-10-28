@@ -4,7 +4,7 @@ KEYPAIR: "Key Pair Name"
 
 # This image is Ubuntu 14.04 LTS amd64 hvm:ebs-ssd in us-east-1
 # Must be changed to region local Ubuntu AMI for all other regions
-IMAGE: "ami-f319c293"
+IMAGE: "ami-c8580bdf"
 
 REMOTE_USER: "ubuntu"
 INSTANCE_TYPE: "t2.medium"
@@ -22,6 +22,6 @@ SUBNET1: "{{ vpc.subnets[1].id }}"
 AZ_SN2: "{{ vpc.subnets[2].az }}"
 SUBNET2: "{{ vpc.subnets[2].id }}"
 ELB: "{{ elb.elb.name }}"
-TAG_NAME: "ConductR Node"
+TAG_NAME: "Lightbend ConductR Node"
 CONDUCTR_PKG: "conductr_1.1.10_all.deb"
 CONDUCTR_HAPROXY_PKG: "conductr-haproxy_1.1.10_all.deb"
