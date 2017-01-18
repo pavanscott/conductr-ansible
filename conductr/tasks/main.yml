@@ -1,7 +1,7 @@
 ---
 - name: Copy ConductR
   synchronize: src=conductr/files/{{ CONDUCTR_PKG }} dest=/home/ubuntu
-  
+
 - name: Install ConductR
   apt: deb=/home/ubuntu/{{ CONDUCTR_PKG }}
 
@@ -58,7 +58,7 @@
 - shell: 'echo "conductr-haproxy ALL=(root) NOPASSWD: /usr/bin/reloadHAProxy.sh" | sudo tee -a /etc/sudoers'
   become: yes
   become_method: sudo
- 
+
 - shell: "echo '$ModLoad imtcp' | sudo tee -a /etc/rsyslog.d/conductr.conf"
   become: yes
   become_method: sudo

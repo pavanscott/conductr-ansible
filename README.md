@@ -14,13 +14,30 @@ The playbook build-cluster-ec2.yml launches three instances across two availabil
 You'll need the following in order to use these playbooks.
 
 * Access Key and Secret for an AWS Account with permissions to admin EC2.
-* Ansible installed on a controller host. The faster the controller host's connection to the choosen EC2 region, the faster nodes will launch. Ssh access to a small to medium instance in the same AWS region as your cluster works well. See Ansible Setup below for further details.
+* Ansible installed on a controller host (See **Ansible Setup** below for further details). The faster the controller host's connection to the choosen EC2 region, the faster nodes will launch. Ssh access to a small to medium instance in the same AWS region as your cluster works well.
 * An AWS Key Pair (PEM file) downloaded to the Ansible controller host.
 * A copy of the ConductR deb installation package on the Ansible controller host.
 * A copy of this GitHub repo on the Ansible controller host.
 * Ability to accept Oracle's Java License.
 
-## Setup
+## Ansible Setup
+
+```bash
+sudo apt-get install python-setuptools autoconf g++ python2.7-dev
+sudo easy_install pip
+sudo pip install ansible paramiko PyYAML Jinja2 httplib2 boto
+```
+
+Should `pip` not satisfy requirements, `easy_install` is an alternative python installer. Example: `sudo python -m easy_install pyyaml`.
+
+Create a hosts file for Ansible.
+
+```bash
+sudo mkdir /etc/ansible
+echo -e "[local]\n127.0.0.1" | sudo tee -a /etc/ansible/hosts
+```
+
+## ConductR Setup
 
 ConductR is **not** provided by this repository. Visit the [Customer Portal](https://portal.lightbend.com/) to download or [Lightbend.com](https://www.typesafe.com/products/conductr) to sign up to evaluate Lightbend Production Suite.
 
@@ -59,7 +76,7 @@ The playbook defaults to availability zones `a`, `b`, and `c`. Change the create
 
 The create network playbook produces a vars file in the `vars` folder named `{{EC2_REGION}}_vars.yml` where {{EC2_REGION}} is the region used. You **must** add the name of your key pair to `{{EC2_REGION}}_vars.yml` in order to use it with the build cluster script. Change the "Key Pair Name" of `KEYPAIR: "Key Pair Name"` to that of the key pair name, which may be different than the file name and generally does not end in the .pem file extension.
 
-If you want to execute in a region other than us-east-1, you will also need to change the AMI value for `IMAGE` in your vars file to an Ubuntu image in that region. The AMI listed is the Ubuntu 14.04 LTS HVM EBS boot image published by Canonical for us-east-1. Other versions and types of Ubuntu instances are expected to work. The [Ubuntu AMI Locator](http://cloud-images.ubuntu.com/locator/ec2/) can help you find AMI's for alternative regions and instance types.
+If you want to execute in a region other than us-east-1, you will also need to change the AMI value for `IMAGE` in your vars file to an Ubuntu image in that region. The AMI listed is the Ubuntu 16.04 LTS HVM EBS boot image published by Canonical for us-east-1. Other versions and types of Ubuntu instances are expected to work. The [Ubuntu AMI Locator](http://cloud-images.ubuntu.com/locator/ec2/) can help you find AMI's for alternative regions and instance types.
 
 We pass both our vars file and EC2 PEM key to our playbook as command line arguments. The VARS_FILE template can be the one created from the create script. There is also a `vars.yml` template you can use instead. The private-key value must be the local path and filename of the keypair that has the key pair name `KEYPAIR` specified in the vars file. For example our key pair may be named `ConductR_Key` in AWS and reside locally as `~/secrets/ConductR.pem`. In which case we would set `KEYPAIR` to `ConductR_Key` and pass `~/secrets/ConductR.pem` as our private-key argument.
 
@@ -97,35 +114,6 @@ The vars file templates contain variables for controlling optional features and 
 `INSTALL_DOCKER` defaults to "false." If set to "true," the Docker apt repository is used to install lxc-docker for ConductR non-root usage.
 
 `INSTALL_CLI` defaults to "true." If set to "false," the [ConductR Command Line Interface(CLI)](https://github.com/typesafehub/conductr-cli) will not be installed.
-
-## Ansible Setup
-
-These plays are being developed out of the current master branch of Ansible. They may or may not work with older packaged versions.
-
-Setup Ansible from source using git and pip.
-
-```bash
-git clone https://github.com/ansible/ansible.git --recursive
-sudo apt-get install python-setuptools autoconf g++ python2.7-dev
-sudo easy_install pip
-sudo pip install paramiko PyYAML Jinja2 httplib2 boto
-```
-
-Should `pip` not satisfy requirements, `easy_install` is an alternative python installer. Example: `sudo python -m easy_install pyyaml`.
-
-Create a hosts file for Ansible.
-
-```bash
-sudo mkdir /etc/ansible
-echo -e "[local]\n127.0.0.1" | sudo tee -a /etc/ansible/hosts
-```
-
-Configure a shell to use Ansible from source
-
-```bash
-cd ansible
-source ./hacking/env-setup -q
-```
 
 ## Network Architecture
 
