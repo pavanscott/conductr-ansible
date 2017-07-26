@@ -14,7 +14,7 @@
 # Must be changed to region local Ubuntu AMI for all other regions
 #
   vars:
-    BASTION_IMAGE: "ami-20631a36"
+    BASTION_IMAGE: "ami-cd0f5cb6"
     BASTION_INSTANCE_TYPE: "t2.large"
     BASTION_VOL_TYPE: "gp2"
     BASTION_VOL_SIZE: 100
@@ -246,6 +246,11 @@
             from_port: 10000
             to_port: 10999
             group_name: "{{ core_sg.group_id }}"
+          # Proxy access from ConductR private agents
+          - proto: tcp
+            from_port: 10000
+            to_port: 10999
+            group_name: "{{ private_agent_sg.group_id }}"
           # Proxy access from ConductR public agents
           - proto: tcp
             from_port: 10000
