@@ -1,5 +1,7 @@
 # Ansible Plays for Lightbend Enterprise Suite ConductR
 
+*Note that this project is EOL as of 2018-01-31.*
+
 These plays and playbooks provision [Lightbend ConductR](https://conductr.lightbend.com) cluster nodes in AWS EC2 using
  [Ansible](http://www.ansible.com). ConductR is the project name for Service Orchestration in Lightbend Enterprise Suite.
  The [ConductrR-Cloudformation](https://github.com/typesafehub/conductr-cloudformation) templates are another way to provision
